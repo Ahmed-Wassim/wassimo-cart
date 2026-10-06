@@ -11,9 +11,9 @@ services:
         - PORT=${PORT}
         - ENV=${ENV}
         # Container-local overrides: same credentials, Docker DNS hostnames.
-        - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
-        - CATALOG_SERVICE_URL=http://app:8080
-      depends_on: { postgres: { condition: service_healthy } }
+        - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@cart-db:5432/${POSTGRES_DB}?sslmode=disable
+        - CATALOG_SERVICE_URL=http://catalog:8080
+      depends_on: { cart-db: { condition: service_healthy } }
       networks: [wassimo-network]
 
   cart-prod:
@@ -23,12 +23,12 @@ services:
       environment:
         - PORT=8080
         - ENV=dev
-        - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
-        - CATALOG_SERVICE_URL=http://app:8080
-      depends_on: { postgres: { condition: service_healthy } }
+        - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@cart-db:5432/${POSTGRES_DB}?sslmode=disable
+        - CATALOG_SERVICE_URL=http://catalog:8080
+      depends_on: { cart-db: { condition: service_healthy } }
       networks: [wassimo-network]
 
-  postgres:
+  cart-db:
     image: postgres:18
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
